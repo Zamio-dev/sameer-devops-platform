@@ -1,0 +1,38 @@
+# Environment & Secrets — NEVER commit these
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# Dependencies
+node_modules/
+apps/frontend/.next/
+apps/frontend/out/
+
+# Go build artifacts
+apps/backend/bin/
+apps/backend/*.exe
+
+# Terraform state — contains infrastructure secrets
+infrastructure/terraform/.terraform/
+infrastructure/terraform/*.tfstate
+infrastructure/terraform/*.tfstate.backup
+infrastructure/terraform/.terraform.lock.hcl
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+.docker/
+
+# Logs
+*.log
+logs/
