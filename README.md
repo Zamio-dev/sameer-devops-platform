@@ -1,6 +1,6 @@
 # Sameer Malik RP — DevOps Portfolio Platform
 
-[![CI/CD Pipeline](https://github.com/YOUR_USERNAME/sameer-devops-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/sameer-devops-platform/actions)
+[![CI/CD Pipeline](https://github.com/Zamio-dev/sameer-devops-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/Zamio-dev/sameer-devops-platform/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > An enterprise-grade SaaS portfolio platform built to showcase production DevOps engineering capabilities.
@@ -19,11 +19,11 @@ This is not a simple portfolio website. This is a **live, running SaaS platform*
 
 ## Architecture Overview
 ┌─────────────────────────────────────────────────────────┐
-│                    Cloudflare (CDN/WAF)                  │
+│                    Cloudflare (CDN/WAF)                 │
 └─────────────────────────┬───────────────────────────────┘
-│
+						  │
 ┌─────────────────────────▼───────────────────────────────┐
-│              Kubernetes Cluster (k3s/EKS)                │
+│              Kubernetes Cluster (k3s/EKS)               │
 │  ┌──────────────┐  ┌──────────────┐  ┌───────────────┐  │
 │  │  Next.js UI  │  │  Go Backend  │  │  PostgreSQL   │  │
 │  │   Port 3000  │  │   Port 8080  │  │   Port 5432   │  │
@@ -59,7 +59,7 @@ This is not a simple portfolio website. This is a **live, running SaaS platform*
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/sameer-devops-platform.git
+git clone https://github.com/Zamio-dev/sameer-devops-platform.git
 cd sameer-devops-platform
 
 # Copy environment variables

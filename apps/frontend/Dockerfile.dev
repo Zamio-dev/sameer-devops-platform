@@ -1,0 +1,20 @@
+FROM node:20-alpine
+
+# Install pnpm
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Copy package files first (Docker layer caching)
+# If these don't change, Docker skips pnpm install on rebuild
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+
+EXPOSE 3000
+
+# --hostname 0.0.0.0 is REQUIRED — without it Next.js only listens
+# on 127.0.0.1 inside the container, unreachable from outside
+CMD ["pnpm", "dev", "--hostname", "0.0.0.0"]

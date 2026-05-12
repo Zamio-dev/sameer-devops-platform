@@ -1,0 +1,193 @@
+/* ─── Import Tailwind v4 ──────────────────────────────────────────── */
+/* v4 uses @import instead of @tailwind directives */
+/* This single import replaces: @tailwind base, components, utilities */
+@import "tailwindcss";
+
+/* tw-animate-css replaces tailwindcss-animate in v4 */
+@import "tw-animate-css";
+
+/* ─── Dark mode variant ───────────────────────────────────────────── */
+/* Tells Tailwind: dark: classes activate when ancestor has class="dark" */
+/* next-themes adds class="dark" to <html> when dark mode is active */
+@custom-variant dark (&:is(.dark *));
+
+/* ─── Design tokens (replaces tailwind.config.ts theme section) ───── */
+/* @theme inline means: expose these as CSS variables AND Tailwind utilities */
+/* e.g. bg-background, text-foreground, border-border become valid classes */
+@theme inline {
+  /* Border radius scale */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Colour system — maps Tailwind utilities to our CSS variables */
+  /* bg-background → uses --background variable below */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Custom terminal colours — creates bg-terminal-green, text-terminal-green etc. */
+  --color-terminal-green: oklch(0.87 0.26 138.6);
+  --color-terminal-cyan: oklch(0.85 0.15 205);
+  --color-terminal-amber: oklch(0.82 0.18 75);
+  --color-terminal-red: oklch(0.65 0.23 25);
+  --color-terminal-bg: oklch(0.08 0.01 265);
+  --color-terminal-surface: oklch(0.11 0.01 265);
+
+  /* Custom animations */
+  --animate-blink: blink 1s step-end infinite;
+  --animate-fade-up: fade-up 0.5s ease-out;
+  --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
+  --animate-scanline: scanline 8s linear infinite;
+
+  /* Font families */
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), Menlo, Monaco, monospace;
+}
+
+/* ─── Light mode colour values ────────────────────────────────────── */
+/* In v4, oklch() is the recommended colour format */
+/* oklch = lightness, chroma, hue — more perceptually uniform than HSL */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+}
+
+/* ─── Dark mode colour values ─────────────────────────────────────── */
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}
+
+/* ─── Base resets ─────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Terminal green selection colour */
+  ::selection {
+    background: oklch(0.87 0.26 138.6 / 20%);
+  }
+}
+
+/* ─── Custom keyframes ────────────────────────────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 5px oklch(0.87 0.26 138.6), 0 0 10px oklch(0.87 0.26 138.6); }
+  50% { box-shadow: 0 0 20px oklch(0.87 0.26 138.6), 0 0 40px oklch(0.87 0.26 138.6); }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* ─── Utility classes ─────────────────────────────────────────────── */
+@layer utilities {
+  /* Glassmorphism card effect */
+  .glass {
+    background: oklch(1 0 0 / 5%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid oklch(1 0 0 / 10%);
+  }
+
+  /* Terminal glow text */
+  .glow-green {
+    text-shadow: 0 0 10px oklch(0.87 0.26 138.6), 0 0 20px oklch(0.87 0.26 138.6);
+  }
+
+  /* Hide scrollbar, keep scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* CRT scanlines overlay */
+  .scanlines::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      oklch(0 0 0 / 5%) 2px,
+      oklch(0 0 0 / 5%) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+}
