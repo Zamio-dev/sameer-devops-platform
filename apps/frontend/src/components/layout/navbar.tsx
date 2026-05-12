@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "motion/react"
 import { Terminal, Menu, X, Moon, Sun } from "lucide-react"
 import { GithubLogo } from "@phosphor-icons/react"
 import { useTheme } from "next-themes"
@@ -11,11 +11,11 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 const navItems = [
-  { label: "Home", href: "/" },
-  { label: "Projects", href: "/projects" },
+  { label: "Home",         href: "/" },
+  { label: "Projects",     href: "/projects" },
   { label: "Architecture", href: "/architecture" },
-  { label: "Blog", href: "/blog" },
-  { label: "About", href: "/about" },
+  { label: "Blog",         href: "/blog" },
+  { label: "About",        href: "/about" },
 ] as const
 
 export function Navbar() {
@@ -38,7 +38,7 @@ export function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Nav */}
+        {/* Desktop links */}
         <div className="hidden md:flex items-center gap-1">
           {navItems.map((item) => (
             <Link
@@ -58,52 +58,36 @@ export function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-
-          {/* Terminal button — desktop only */}
           <Link href="/terminal" className="hidden md:block">
-            <Button
-              variant="outline"
-              size="sm"
-              className="items-center gap-2 font-mono text-xs border-primary/30 hover:border-primary hover:bg-primary/10"
-            >
+            <Button variant="outline" size="sm" className="font-mono text-xs gap-2 border-primary/30 hover:border-primary hover:bg-primary/10">
               <Terminal className="h-3 w-3" />
               ./terminal
             </Button>
           </Link>
 
-          {/* GitHub link — plain anchor, no asChild needed */}
          <a 
             href="https://github.com/YOUR_USERNAME/sameer-devops-platform"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent transition-colors"
           >
             <GithubLogo className="h-4 w-4" />
           </a>
 
-          {/* Theme toggle */}
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             aria-label="Toggle theme"
           >
-            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <Sun className="h-4 w-4 scale-100 dark:scale-0 transition-all" />
+            <Moon className="absolute h-4 w-4 scale-0 dark:scale-100 transition-all" />
           </Button>
 
-          {/* Mobile menu toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
-          >
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsOpen(!isOpen)} aria-label="Menu">
             {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </Button>
-
         </div>
       </div>
 
@@ -133,16 +117,6 @@ export function Navbar() {
                   {item.label}
                 </Link>
               ))}
-              <Link href="/terminal" onClick={() => setIsOpen(false)}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full mt-2 font-mono text-xs"
-                >
-                  <Terminal className="h-3 w-3 mr-2" />
-                  ./terminal
-                </Button>
-              </Link>
             </div>
           </motion.div>
         )}
@@ -150,4 +124,3 @@ export function Navbar() {
     </nav>
   )
 }
-

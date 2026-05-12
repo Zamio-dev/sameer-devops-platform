@@ -1,18 +1,12 @@
-# docker-compose.yml
-# This file declares your ENTIRE local development environment.
-# Every engineer on your team runs `make up` and gets identical environments.
-# This solves "works on my machine" — a classic DevOps problem.
-
-version: "3.9"
+# No `version` field — obsolete since Docker Compose v2
+# App services (frontend/backend) run locally for hot reload
+# Infrastructure services run in Docker
 
 networks:
-  # All services communicate on this private network
-  # Containers can reach each other by service name (e.g., "postgres", "redis")
   platform-network:
     driver: bridge
 
 volumes:
-  # Named volumes persist data between restarts
   postgres-data:
   redis-data:
   grafana-data:
@@ -20,54 +14,8 @@ volumes:
 
 services:
 
-  # ─── Frontend ─────────────────────────────────────────────────────────────
-  frontend:
-    build:
-      context: ./apps/frontend
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"       # Accessible at http://localhost:3000
-    volumes:
-      - ./apps/frontend:/app    # Hot reload — changes reflect instantly
-      - /app/node_modules       # Don't overwrite container's node_modules
-    environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:8080
-    depends_on:
-      - backend
-    networks:
-      - platform-network
-
-  # ─── Backend API ──────────────────────────────────────────────────────────
-  backend:
-    build:
-      context: ./apps/backend
-      dockerfile: Dockerfile.dev
-    ports:
-      - "8080:8080"       # API at http://localhost:8080
-    volumes:
-      - ./apps/backend:/app    # Live reload with Air (Go hot-reload tool)
-    environment:
-      - ENV=development
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=platform_db
-      - DB_USER=platform_user
-      - DB_PASSWORD=platform_dev_password
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - JWT_SECRET=dev-secret-change-in-production
-    depends_on:
-      postgres:
-        condition: service_healthy   # Wait until Postgres is ACTUALLY ready
-      redis:
-        condition: service_healthy
-    networks:
-      - platform-network
-
-  # ─── Database ─────────────────────────────────────────────────────────────
   postgres:
-    image: postgres:16-alpine        # Alpine = smaller image, faster
+    image: postgres:17.5-alpine
     ports:
       - "5432:5432"
     environment:
@@ -75,7 +23,7 @@ services:
       POSTGRES_USER: platform_user
       POSTGRES_PASSWORD: platform_dev_password
     volumes:
-      - postgres-data:/var/lib/postgresql/data   # Data persists across restarts
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U platform_user -d platform_db"]
       interval: 10s
@@ -84,12 +32,11 @@ services:
     networks:
       - platform-network
 
-  # ─── Cache ────────────────────────────────────────────────────────────────
   redis:
-    image: redis:7-alpine
+    image: redis:7.4.3-alpine
     ports:
       - "6379:6379"
-    command: redis-server --appendonly yes    # Persistence mode
+    command: redis-server --appendonly yes
     volumes:
       - redis-data:/data
     healthcheck:
@@ -100,36 +47,39 @@ services:
     networks:
       - platform-network
 
-  # ─── Database Admin UI ────────────────────────────────────────────────────
   pgadmin:
-    image: dpage/pgadmin4:latest
+    image: dpage/pgadmin4:9.4
     ports:
-      - "5050:80"          # pgAdmin at http://localhost:5050
+      - "5050:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@platform.local
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
     depends_on:
       - postgres
     networks:
       - platform-network
 
-  # ─── Monitoring (added now, configured later) ─────────────────────────────
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.4.1
     ports:
       - "9090:9090"
     volumes:
       - ./platform/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-lifecycle"
     networks:
       - platform-network
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:12.0.1
     ports:
-      - "3001:3000"        # Grafana at http://localhost:3001
+      - "3001:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
       - grafana-data:/var/lib/grafana
     depends_on:
