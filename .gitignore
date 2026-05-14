@@ -38,6 +38,9 @@ Thumbs.db
 logs/
 
 #agent files
-.claude/
-CLAUDE.md
-AGENTS.md
+apps/backend/.claude/
+apps/backend/CLAUDE.md
+apps/backend/AGENTS.md
+*claude
+*CLAUDE
+*AGENTS
