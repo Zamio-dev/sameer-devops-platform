@@ -39,6 +39,7 @@ logs/
 
 #agent files
 apps/backend/.claude/
+apps/backend/.claude/*
 apps/backend/CLAUDE.md
 apps/backend/AGENTS.md
 *claude
