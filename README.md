@@ -9,9 +9,6 @@
 
 This is not a simple portfolio website. This is a **live, running SaaS platform** that demonstrates:
 
-- **Kubernetes** orchestration with k3s locally and EKS in production
-- **GitOps** workflows with ArgoCD
-- **CI/CD pipelines** with GitHub Actions and Jenkins
 - **Infrastructure as Code** with Terraform and Ansible
 - **Observability** with Prometheus, Grafana, Loki, and Tempo
 - **Security-first** engineering with Trivy, Falco, and OWASP ZAP
@@ -41,9 +38,6 @@ This is not a simple portfolio website. This is a **live, running SaaS platform*
 | Frontend | Next.js 15, TypeScript, TailwindCSS, shadcn/ui |
 | Backend | Go 1.22, Gin, Clean Architecture |
 | Database | PostgreSQL 16, Redis 7 |
-| Orchestration | Kubernetes (k3s → EKS) |
-| GitOps | ArgoCD |
-| CI/CD | GitHub Actions, Jenkins |
 | IaC | Terraform, Ansible |
 | Monitoring | Prometheus, Grafana, Loki, Tempo |
 | Security | Trivy, Falco, OWASP ZAP, Sealed Secrets |
@@ -95,6 +89,6 @@ See [roadmap.md](roadmap.md) for full timeline.
 ## About the Engineer
 
 **Sameer Malik RP** — Transitioning DevOps Engineer  
-RHCSA Certified | AWS | Docker | Kubernetes | Terraform  
+RHCSA Certified | AWS | Docker | Terraform  
 
 [LinkedIn](#) | [Portfolio](#)
